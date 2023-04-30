@@ -17,4 +17,17 @@ model JournalEntry {
     title     String   @default("Untitled")
     body      Json
     authorId  String
+
+    @@index([authorId])
+}
+
+model Suggestion {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    type      String
+    msg       String
+    userId    String
+
+    @@index([userId])
 }

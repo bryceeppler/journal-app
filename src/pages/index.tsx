@@ -3,6 +3,7 @@ import { api } from "~/utils/api";
 import Layout from "~/components/Layout";
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Tiptap from "~/components/TipTap";
+import JournalRecommendations from "~/components/JournalRecommendations";
 import { useCallback, useState } from "react";
 import { type JSONContent } from "@tiptap/react";
 import { toast } from "react-hot-toast";
@@ -93,7 +94,9 @@ const Home: NextPage = () => {
           <div className="container grid grid-cols-12 gap-4">
             {/* Sidebar */}
             <div className="col-span-12 flex flex-col gap-1 sm:col-span-4 lg:col-span-3">
-              <div className="flex items-center justify-between">
+              <JournalRecommendations />
+              <div className="p-2" />
+              {/* <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold">Templates</h2>
                 <div className="dropdown dropdown-end">
                   <label tabIndex={0} className="btn-ghost btn-sm btn">
@@ -134,7 +137,7 @@ const Home: NextPage = () => {
                 <h3>Brain Dump</h3>
               </div>
 
-              <div className="p-2" />
+              <div className="p-2" /> */}
 
               <h2 className="text-xl font-bold">History</h2>
               {journalEntries &&
