@@ -20,16 +20,23 @@ export const journalEntryRouter = createTRPCRouter({
         where: {
           authorId: input.authorId,
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
     }),
 
   create: publicProcedure
-    .input(z.object({ authorId: z.string(), body: z.string() }))
+    // body is of JSONContent type
+    .input(
+      z.object({ authorId: z.string(), body: z.unknown(), title: z.string() })
+    )
     .mutation(({ input, ctx }) => {
       return ctx.prisma.journalEntry.create({
         data: {
+          title: input.title,
           authorId: input.authorId,
-          body: input.body,
+          body: JSON.stringify(input.body),
         },
       });
     }),
@@ -38,7 +45,8 @@ export const journalEntryRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
-        body: z.string(),
+        body: z.optional(z.unknown()),
+        title: z.optional(z.string()),
       })
     )
     .mutation(({ input, ctx }) => {
@@ -47,7 +55,8 @@ export const journalEntryRouter = createTRPCRouter({
           id: input.id,
         },
         data: {
-          body: input.body,
+          body: JSON.stringify(input.body),
+          title: input.title,
         },
       });
     }),

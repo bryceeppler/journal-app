@@ -1,15 +1,18 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, type JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useEffect } from "react";
 
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
 
 import dayjs from "dayjs";
-
-const Tiptap = () => {
+interface TiptapProps {
+  onUpdate: (content: JSONContent) => void;
+}
+const Tiptap: React.FC<TiptapProps> = ({ onUpdate }) => {
   const editor = useEditor({
     extensions: [
       Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -36,6 +39,18 @@ const Tiptap = () => {
       <p>Start writing your journal entry here...</p>
     `,
   });
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateContent = () => {
+      onUpdate(editor.getJSON());
+    };
+
+    editor.on("transaction", updateContent);
+    return () => {
+      editor.off("transaction", updateContent);
+    };
+  }, [editor, onUpdate]);
 
   return <EditorContent editor={editor} />;
 };
