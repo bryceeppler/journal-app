@@ -41,19 +41,25 @@ export default function ThemeSelector({}: Props) {
     // 👆 false parameter is required for react project
   }, []);
   return (
-
+    <div>
+      {/* using theme-change package and daisyUI themes, create a menu that drops down to display clickable themes */}
+      <div className="dropdown dropdown-hover">
+        <div tabIndex={0} className="">
+          Theme
+        </div>
         <ul
           tabIndex={0}
-          className="rounded-box w-52 bg-base-100 p-2 shadow"
+          className="dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow"
         >
           {themes.map((theme) => (
             <li key={theme}>
-              <div data-set-theme={theme} className="cursor-pointer">
+              <button data-set-theme={theme} className="cursor-pointer">
                 {theme}
-              </div>
+              </button>
             </li>
           ))}
         </ul>
-
+      </div>
+    </div>
   );
 }

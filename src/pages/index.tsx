@@ -1,26 +1,39 @@
 import { type NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import { useState } from "react";
 import { api } from "~/utils/api";
 import Layout from "~/components/Layout";
-import ThemeSelector from "~/components/ThemeSelector";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Tiptap from "~/components/TipTap";
-import dayjs from "dayjs";
-
 
 const Home: NextPage = () => {
+  const { user, isLoaded: userLoaded, isSignedIn } = useUser();
+  const createJournalEntry = api.journalEntry.create.useMutation();
+  const { data: journalEntries, isLoading: journalEntriesLoading } =
+    api.journalEntry.getByAuthor.useQuery(
+      {
+        authorId: user?.id as string,
+      },
+      {
+        enabled: userLoaded && isSignedIn,
+      }
+    );
+
   return (
     <>
       <Layout>
-        <main className="flex min-h-screen flex-col items-center justify-center bg-base-100 max-w-4xl mx-auto">
-          <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-              <div>
-              <h1 className="text-4xl font-bold w-full">
-                {dayjs().format("dddd, MMMM D, YYYY")}
-              </h1>
-              <div className="p-2" />
-            <Tiptap />
+        {/* ... */}
+        <main className="mx-auto min-h-screen max-w-4xl flex-col bg-base-100">
+          <div className="container grid grid-cols-12 gap-4">
+            {/* Sidebar */}
+            <div className="col-span-12 sm:col-span-4 lg:col-span-3">
+              <h2 className="text-xl font-bold">Sidebar</h2>
+              <button className="btn">Save Content</button>
+            </div>
+            {/* Editor */}
+            <div className="col-span-12 sm:col-span-8 lg:col-span-9">
+              {/* ... */}
+              <div className="h-full w-full overflow-auto">
+                <Tiptap />
+              </div>
             </div>
           </div>
         </main>
